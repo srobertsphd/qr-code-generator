@@ -10,7 +10,22 @@ def generate_qr_code(url, error_correction='L'):
     return buffer
 
 st.title("QR Code Generator")
+# st.write("""
+# #### Error Correction Levels
+
+# - **L**: 7% error correction
+# - **M**: 15% error correction
+# - **Q**: 25% error correction
+# - **H**: 30% error correction
+
+# Higher levels increase QR code resilience to damage.
+# """)
+
+url = st.text_input("Enter URL", "https://example.com")
+file_name_input = st.text_input("Enter Custom File Name Below [optional]", "your-file-name")
 st.write("""
+##### Error Correction Levels
+
 - **L**: 7% error correction
 - **M**: 15% error correction
 - **Q**: 25% error correction
@@ -18,9 +33,7 @@ st.write("""
 
 Higher levels increase QR code resilience to damage.
 """)
-
-url = st.text_input("Enter URL", "https://example.com")
-error_correction = st.selectbox("Select Error Correction Level", ['L', 'M', 'Q', 'H'])
+error_correction = st.selectbox("Select Error Correction Level", ['L', 'M', 'Q', 'H'], index=1)
 
 col1, col2 = st.columns([1, 1])
 
@@ -29,7 +42,7 @@ with col1:
         qr_buffer = generate_qr_code(url, error_correction)
         st.image(qr_buffer, caption="Generated QR Code", use_container_width=True)
         st.session_state.qr_buffer = qr_buffer
-        st.session_state.file_name = f"generated_qr_code_{error_correction}.png"
+        st.session_state.file_name = f"{file_name_input}_qr_code_{error_correction}.png" if file_name_input else f"qr_code_{error_correction}.png"
 
 with col2:
     if 'qr_buffer' in st.session_state:
